@@ -168,7 +168,7 @@ void Gerenciador::comandos(Grafo* grafo) {
         }
     }
 
-    comandos(grafo);
+    
 
 }
 

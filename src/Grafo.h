@@ -28,7 +28,7 @@ public:
     vector<char> centro(); // h 3
     vector<char> periferia(); // h 4
     vector<char> vertices_de_articulacao(); // i
-
+    void adicionarAresta(char u, char v, int peso);
 
     int ordem;
     bool in_direcionado;
