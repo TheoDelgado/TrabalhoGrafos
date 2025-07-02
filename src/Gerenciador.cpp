@@ -41,7 +41,6 @@ void Gerenciador::comandos(Grafo* grafo) {
                 cout<<"Metodo de impressao em arquivo nao implementado"<<endl;
             }
 
-;
             break;
         }
 
