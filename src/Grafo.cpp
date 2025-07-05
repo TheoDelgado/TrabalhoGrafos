@@ -5,6 +5,8 @@
 #include <set>        // set
 #include <tuple>      // tie / tuple
 #include <functional> // greater
+#include <stack>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,13 +17,71 @@ Grafo::~Grafo() {
 }
 
 vector<char> Grafo::fecho_transitivo_direto(char id_no) {
-    cout<<"Metodo nao implementado"<<endl;
-    return {};
+    set<char> visitado;
+    stack<char> pilha;
+
+    pilha.push(id_no);
+
+    while (!pilha.empty()) {
+        char atual = pilha.top();
+        pilha.pop();
+
+        if (visitado.count(atual)) continue;
+        visitado.insert(atual);
+
+        for (No* no : lista_adj) {
+            if (no->id == atual) {
+                for (Aresta* aresta : no->arestas) {
+                    pilha.push(aresta->id_no_alvo);
+                }
+                break;
+            }
+        }
+    }
+
+    vector<char> resultado(visitado.begin(), visitado.end());
+    resultado.erase(remove(resultado.begin(), resultado.end(), id_no), resultado.end()); // remove o próprio nó
+    return resultado;
 }
 
 vector<char> Grafo::fecho_transitivo_indireto(char id_no) {
-    cout<<"Metodo nao implementado"<<endl;
-    return {};
+    set<char> alcançadores;
+
+    for (No* no : lista_adj) {
+        char origem = no->id;
+        if (origem == id_no) continue;
+
+        set<char> visitado;
+        stack<char> pilha;
+        pilha.push(origem);
+
+        while (!pilha.empty()) {
+            char atual = pilha.top();
+            pilha.pop();
+
+            if (visitado.count(atual)) continue;
+            visitado.insert(atual);
+
+            for (Aresta* aresta : no->arestas) {
+                pilha.push(aresta->id_no_alvo);
+            }
+
+            for (No* vizinho : lista_adj) {
+                if (vizinho->id == atual) {
+                    for (Aresta* aresta : vizinho->arestas) {
+                        pilha.push(aresta->id_no_alvo);
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (visitado.count(id_no)) {
+            alcançadores.insert(origem);
+        }
+    }
+
+    return vector<char>(alcançadores.begin(), alcançadores.end());
 }
 
 vector<char> Grafo::caminho_minimo_dijkstra(char id_no_a, char id_no_b) {
